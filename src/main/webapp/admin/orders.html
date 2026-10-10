@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Orders - ShopSphere</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body>
+
+    <header>
+
+        <h1>ShopSphere Admin</h1>
+
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="products.html">Products</a>
+            <a href="add-product.html">Add Product</a>
+            <a href="orders.html">Orders</a>
+            <a href="../index.html">Store</a>
+            <a href="../logout">Logout</a>
+        </nav>
+
+    </header>
+
+    <main>
+
+        <section class="admin-orders">
+
+            <h2>Manage Orders</h2>
+
+            <div class="admin-order-card">
+
+                <h3>Order #1</h3>
+
+                <p>
+                    User ID: 1
+                </p>
+
+                <p>
+                    Total Amount: ₹999.99
+                </p>
+
+                <p>
+                    Order Date: 2026-10-08
+                </p>
+
+                <p>
+                    Current Status:
+                    <strong>PLACED</strong>
+                </p>
+
+                <form action="../orders" method="post">
+
+                    <input type="hidden" name="orderId" value="1">
+
+                    <label for="status">
+                        Update Status:
+                    </label>
+
+                    <select id="status" name="status" required>
+
+                        <option value="PLACED">
+                            Placed
+                        </option>
+
+                        <option value="PROCESSING">
+                            Processing
+                        </option>
+
+                        <option value="SHIPPED">
+                            Shipped
+                        </option>
+
+                        <option value="DELIVERED">
+                            Delivered
+                        </option>
+
+                        <option value="CANCELLED">
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                    <button type="submit">
+                        Update Status
+                    </button>
+
+                </form>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+
+        <p>
+            &copy; 2026 ShopSphere. All rights reserved.
+        </p>
+
+    </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,3216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Products - ShopSphere</title>
+
+    <style>
+        /* =====================================================
+           RESET
+        ====================================================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #222;
+            line-height: 1.6;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* =====================================================
+           HEADER
+        ====================================================== */
+
+        header {
+            background: linear-gradient(135deg, #111827, #1e3a8a);
+            color: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        header h1 {
+            font-size: 28px;
+            letter-spacing: 1px;
+        }
+
+        nav {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #93c5fd;
+        }
+
+        /* =====================================================
+           PAGE TITLE
+        ====================================================== */
+
+        .page-header {
+            text-align: center;
+            padding: 55px 20px 30px;
+        }
+
+        .page-header h2 {
+            font-size: 38px;
+            color: #111827;
+            margin-bottom: 10px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            font-size: 17px;
+        }
+
+        /* =====================================================
+           SEARCH
+        ====================================================== */
+
+        .search-container {
+            max-width: 850px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        #product-search {
+            width: 100%;
+            padding: 17px 55px 17px 20px;
+            border: 2px solid #dbe1ea;
+            border-radius: 12px;
+            outline: none;
+            font-size: 16px;
+            background: white;
+            transition: 0.3s;
+        }
+
+        #product-search:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        #clear-search {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: transparent;
+            font-size: 22px;
+            color: #6b7280;
+            display: none;
+        }
+
+        .result-count {
+            margin-top: 12px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* =====================================================
+           PRODUCTS
+        ====================================================== */
+
+        .products-container {
+            width: 90%;
+            max-width: 1400px;
+            margin: auto;
+            padding-bottom: 60px;
+        }
+
+        #product-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            background: #f3f4f6;
+        }
+
+        .product-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-category {
+            display: inline-block;
+            color: #2563eb;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 7px;
+        }
+
+        .product-card h3 {
+            font-size: 20px;
+            color: #111827;
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+
+        .product-price {
+            color: #111827;
+            font-size: 22px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-to-cart-btn,
+        .view-details-btn {
+            flex: 1;
+            border: none;
+            padding: 12px 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+
+        .add-to-cart-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #1d4ed8;
+        }
+
+        .view-details-btn {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .view-details-btn:hover {
+            background: #d1d5db;
+        }
+
+        /* =====================================================
+           NO RESULTS
+        ====================================================== */
+
+        #no-results {
+            display: none;
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+        }
+
+        #no-results h3 {
+            color: #111827;
+            font-size: 25px;
+            margin-bottom: 8px;
+        }
+
+        /* =====================================================
+           MODAL
+        ====================================================== */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 18px;
+            position: relative;
+            animation: modalOpen 0.25s ease;
+        }
+
+        @keyframes modalOpen {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.97);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 18px;
+            top: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.08);
+            font-size: 25px;
+            z-index: 5;
+        }
+
+        .close-modal:hover {
+            background: rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 35px;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #f3f4f6;
+        }
+
+        .modal-details {
+            padding: 10px;
+        }
+
+        .modal-details .category {
+            color: #2563eb;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .modal-details h2 {
+            font-size: 32px;
+            color: #111827;
+            margin: 8px 0 12px;
+        }
+
+        .modal-details .description {
+            color: #6b7280;
+            margin-bottom: 18px;
+        }
+
+        .modal-price {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .availability {
+            color: #16a34a;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .features-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        #details-features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        #details-features li {
+            padding: 7px 0;
+            color: #4b5563;
+        }
+
+        #details-features li::before {
+            content: "✓";
+            color: #16a34a;
+            font-weight: bold;
+            margin-right: 9px;
+        }
+
+        #details-add-cart {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        #details-add-cart:hover {
+            background: #1d4ed8;
+        }
+
+        /* =====================================================
+           FOOTER
+        ====================================================== */
+
+        footer {
+            background: #111827;
+            color: #d1d5db;
+            text-align: center;
+            padding: 25px;
+        }
+
+        /* =====================================================
+           TOAST
+        ====================================================== */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #111827;
+            color: white;
+            padding: 14px 20px;
+            border-radius: 10px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 1100px) {
+            #product-list {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 800px) {
+            header {
+                flex-direction: column;
+                padding: 15px 20px;
+            }
+
+            nav {
+                gap: 15px;
+            }
+
+            #product-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-body {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-image {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .page-header h2 {
+                font-size: 30px;
+            }
+
+            #product-list {
+                grid-template-columns: 1fr;
+            }
+
+            .products-container {
+                width: 94%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-details h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <header>
+
+        <h1>ShopSphere</h1>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="products.html">Products</a>
+            <a href="cart.html">Cart 🛒</a>
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <section class="page-header">
+
+        <h2>Our Products</h2>
+
+        <p>
+            Discover amazing products at amazing prices.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         SEARCH
+    ====================================================== -->
+
+    <section class="search-container">
+
+        <div class="search-box">
+
+            <input type="text" id="product-search" placeholder="Search for products..." autocomplete="off">
+
+            <button id="clear-search" type="button">
+                ×
+            </button>
+
+        </div>
+
+        <div class="result-count" id="result-count">
+            Showing all products
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRODUCTS
+    ====================================================== -->
+
+    <main class="products-container">
+
+        <div id="product-list">
+
+
+            <!-- =================================================
+                 PRODUCT 1
+            ================================================== -->
+
+            <article class="product-card" data-name="Wireless Headphones" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80"
+                    alt="Wireless Headphones">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Wireless Headphones</h3>
+
+                    <p class="product-description">
+                        Premium wireless headphones with powerful sound and comfortable design.
+                    </p>
+
+                    <div class="product-price">
+                        ₹2,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 2 -->
+
+            <article class="product-card" data-name="Smart Watch" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80"
+                    alt="Smart Watch">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Smart Watch</h3>
+
+                    <p class="product-description">
+                        Modern smartwatch with fitness tracking and smart notifications.
+                    </p>
+
+                    <div class="product-price">
+                        ₹4,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 3 -->
+
+            <article class="product-card" data-name="Running Shoes" data-category="Fashion">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80"
+                    alt="Running Shoes">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>Running Shoes</h3>
+
+                    <p class="product-description">
+                        Lightweight running shoes designed for everyday comfort.
+                    </p>
+
+                    <div class="product-price">
+                        ₹2,499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 4 -->
+
+            <article class="product-card" data-name="Leather Backpack" data-category="Fashion">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80"
+                    alt="Leather Backpack">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>Leather Backpack</h3>
+
+                    <p class="product-description">
+                        Stylish and durable backpack perfect for college and travel.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,899
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 5 -->
+
+            <article class="product-card" data-name="Smartphone" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+                    alt="Smartphone">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Smartphone</h3>
+
+                    <p class="product-description">
+                        Powerful smartphone with a stunning display and high-performance processor.
+                    </p>
+
+                    <div class="product-price">
+                        ₹29,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 6 -->
+
+            <article class="product-card" data-name="Laptop" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?auto=format&fit=crop&w=800&q=80"
+                    alt="Laptop">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Laptop</h3>
+
+                    <p class="product-description">
+                        High-performance laptop suitable for students, developers and creators.
+                    </p>
+
+                    <div class="product-price">
+                        ₹59,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 7 -->
+
+            <article class="product-card" data-name="Bluetooth Speaker" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?auto=format&fit=crop&w=800&q=80"
+                    alt="Bluetooth Speaker">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Bluetooth Speaker</h3>
+
+                    <p class="product-description">
+                        Compact speaker delivering rich sound with impressive battery life.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,799
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 8 -->
+
+            <article class="product-card" data-name="Gaming Mouse" data-category="Gaming">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=800&q=80"
+                    alt="Gaming Mouse">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Gaming
+                    </span>
+
+                    <h3>Gaming Mouse</h3>
+
+                    <p class="product-description">
+                        High-precision gaming mouse with customizable controls.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,299
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 9 -->
+
+            <article class="product-card" data-name="Mechanical Keyboard" data-category="Gaming">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80"
+                    alt="Mechanical Keyboard">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Gaming
+                    </span>
+
+                    <h3>Mechanical Keyboard</h3>
+
+                    <p class="product-description">
+                        Responsive mechanical keyboard designed for gaming and productivity.
+                    </p>
+
+                    <div class="product-price">
+                        ₹3,499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 10 -->
+
+            <article class="product-card" data-name="Gaming Headset" data-category="Gaming">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1599669454699-248893623440?auto=format&fit=crop&w=800&q=80"
+                    alt="Gaming Headset">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Gaming
+                    </span>
+
+                    <h3>Gaming Headset</h3>
+
+                    <p class="product-description">
+                        Immersive gaming headset with microphone and surround sound.
+                    </p>
+
+                    <div class="product-price">
+                        ₹2,799
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 11 -->
+
+            <article class="product-card" data-name="Coffee Maker" data-category="Home">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1517668808822-9ebb02f2a0e6?auto=format&fit=crop&w=800&q=80"
+                    alt="Coffee Maker">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>Coffee Maker</h3>
+
+                    <p class="product-description">
+                        Easy-to-use coffee maker for delicious coffee at home.
+                    </p>
+
+                    <div class="product-price">
+                        ₹3,299
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 12 -->
+
+            <article class="product-card" data-name="Table Lamp" data-category="Home">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80"
+                    alt="Table Lamp">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>Table Lamp</h3>
+
+                    <p class="product-description">
+                        Elegant table lamp that adds warmth and style to any room.
+                    </p>
+
+                    <div class="product-price">
+                        ₹999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 13 -->
+
+            <article class="product-card" data-name="Water Bottle" data-category="Lifestyle">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=800&q=80"
+                    alt="Water Bottle">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Lifestyle
+                    </span>
+
+                    <h3>Water Bottle</h3>
+
+                    <p class="product-description">
+                        Reusable stainless-steel water bottle for everyday use.
+                    </p>
+
+                    <div class="product-price">
+                        ₹699
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 14 -->
+
+            <article class="product-card" data-name="Sunglasses" data-category="Fashion">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1511499767150-a48a237f0083?auto=format&fit=crop&w=800&q=80"
+                    alt="Sunglasses">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>Sunglasses</h3>
+
+                    <p class="product-description">
+                        Stylish sunglasses with UV protection for everyday outdoor use.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 15 -->
+
+            <article class="product-card" data-name="Smart TV" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1593359677879-a4bb92f829d1?auto=format&fit=crop&w=800&q=80"
+                    alt="Smart TV">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Smart TV</h3>
+
+                    <p class="product-description">
+                        Large smart TV with vibrant picture quality and streaming support.
+                    </p>
+
+                    <div class="product-price">
+                        ₹39,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 16 -->
+
+            <article class="product-card" data-name="Wireless Earbuds" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=800&q=80"
+                    alt="Wireless Earbuds">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Wireless Earbuds</h3>
+
+                    <p class="product-description">
+                        Compact wireless earbuds with clear audio and charging case.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 17 -->
+
+            <article class="product-card" data-name="Office Chair" data-category="Furniture">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1580480055273-228ff5388ef8?auto=format&fit=crop&w=800&q=80"
+                    alt="Office Chair">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Furniture
+                    </span>
+
+                    <h3>Office Chair</h3>
+
+                    <p class="product-description">
+                        Ergonomic office chair designed for comfortable long working sessions.
+                    </p>
+
+                    <div class="product-price">
+                        ₹7,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 18 -->
+
+            <article class="product-card" data-name="Backpack" data-category="Fashion">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1622560480605-d83c853bc5c3?auto=format&fit=crop&w=800&q=80"
+                    alt="Backpack">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fashion
+                    </span>
+
+                    <h3>Backpack</h3>
+
+                    <p class="product-description">
+                        Spacious everyday backpack with multiple compartments.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,599
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 19 -->
+
+            <article class="product-card" data-name="Fitness Tracker" data-category="Fitness">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1576243345690-4e4b79b63288?auto=format&fit=crop&w=800&q=80"
+                    alt="Fitness Tracker">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fitness
+                    </span>
+
+                    <h3>Fitness Tracker</h3>
+
+                    <p class="product-description">
+                        Track your steps, workouts, heart rate and daily activity.
+                    </p>
+
+                    <div class="product-price">
+                        ₹2,499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 20 -->
+
+            <article class="product-card" data-name="Yoga Mat" data-category="Fitness">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1592432678016-e910b452f9a2?auto=format&fit=crop&w=800&q=80"
+                    alt="Yoga Mat">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Fitness
+                    </span>
+
+                    <h3>Yoga Mat</h3>
+
+                    <p class="product-description">
+                        Non-slip yoga mat suitable for yoga, stretching and workouts.
+                    </p>
+
+                    <div class="product-price">
+                        ₹899
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 21 -->
+
+            <article class="product-card" data-name="Power Bank" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1609592424850-7c6a9f0f0d34?auto=format&fit=crop&w=800&q=80"
+                    alt="Power Bank">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Power Bank</h3>
+
+                    <p class="product-description">
+                        High-capacity power bank for charging devices while travelling.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,299
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 22 -->
+
+            <article class="product-card" data-name="Camera" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80"
+                    alt="Camera">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Camera</h3>
+
+                    <p class="product-description">
+                        Digital camera for capturing high-quality photos and videos.
+                    </p>
+
+                    <div class="product-price">
+                        ₹44,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 23 -->
+
+            <article class="product-card" data-name="Travel Bag" data-category="Travel">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80"
+                    alt="Travel Bag">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Travel
+                    </span>
+
+                    <h3>Travel Bag</h3>
+
+                    <p class="product-description">
+                        Spacious travel bag designed for short trips and weekend journeys.
+                    </p>
+
+                    <div class="product-price">
+                        ₹2,299
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 24 -->
+
+            <article class="product-card" data-name="Desk Organizer" data-category="Office">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=800&q=80"
+                    alt="Desk Organizer">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Office
+                    </span>
+
+                    <h3>Desk Organizer</h3>
+
+                    <p class="product-description">
+                        Keep your desk clean and organized with this practical organizer.
+                    </p>
+
+                    <div class="product-price">
+                        ₹599
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 25 -->
+
+            <article class="product-card" data-name="Tablet" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=800&q=80"
+                    alt="Tablet">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Tablet</h3>
+
+                    <p class="product-description">
+                        Portable tablet perfect for studying, entertainment and browsing.
+                    </p>
+
+                    <div class="product-price">
+                        ₹18,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 26 -->
+
+            <article class="product-card" data-name="Smartphone Stand" data-category="Accessories">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80"
+                    alt="Smartphone Stand">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Accessories
+                    </span>
+
+                    <h3>Smartphone Stand</h3>
+
+                    <p class="product-description">
+                        Adjustable stand for watching videos and making video calls.
+                    </p>
+
+                    <div class="product-price">
+                        ₹499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 27 -->
+
+            <article class="product-card" data-name="Bluetooth Keyboard" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80"
+                    alt="Bluetooth Keyboard">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Bluetooth Keyboard</h3>
+
+                    <p class="product-description">
+                        Slim wireless keyboard with comfortable typing experience.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 28 -->
+
+            <article class="product-card" data-name="Monitor" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=800&q=80"
+                    alt="Monitor">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Monitor</h3>
+
+                    <p class="product-description">
+                        High-resolution monitor ideal for gaming, coding and creative work.
+                    </p>
+
+                    <div class="product-price">
+                        ₹12,999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 29 -->
+
+            <article class="product-card" data-name="Webcam" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=800&q=80"
+                    alt="Webcam">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>Webcam</h3>
+
+                    <p class="product-description">
+                        Full HD webcam suitable for online classes, meetings and streaming.
+                    </p>
+
+                    <div class="product-price">
+                        ₹2,499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 30 -->
+
+            <article class="product-card" data-name="Desk Mat" data-category="Office">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1616628182506-7f3c9d9c7d67?auto=format&fit=crop&w=800&q=80"
+                    alt="Desk Mat">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Office
+                    </span>
+
+                    <h3>Desk Mat</h3>
+
+                    <p class="product-description">
+                        Large premium desk mat for keyboards, mice and accessories.
+                    </p>
+
+                    <div class="product-price">
+                        ₹799
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 31 -->
+
+            <article class="product-card" data-name="Wireless Charger" data-category="Accessories">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1609592424850-7c6a9f0f0d34?auto=format&fit=crop&w=800&q=80"
+                    alt="Wireless Charger">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Accessories
+                    </span>
+
+                    <h3>Wireless Charger</h3>
+
+                    <p class="product-description">
+                        Convenient wireless charger for compatible smartphones and devices.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,099
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 32 -->
+
+            <article class="product-card" data-name="Bluetooth Adapter" data-category="Accessories">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+                    alt="Bluetooth Adapter">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Accessories
+                    </span>
+
+                    <h3>Bluetooth Adapter</h3>
+
+                    <p class="product-description">
+                        Compact Bluetooth adapter for connecting compatible devices.
+                    </p>
+
+                    <div class="product-price">
+                        ₹699
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 33 -->
+
+            <article class="product-card" data-name="LED Strip Lights" data-category="Home">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1565814329452-e1efa11c5b89?auto=format&fit=crop&w=800&q=80"
+                    alt="LED Strip Lights">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>LED Strip Lights</h3>
+
+                    <p class="product-description">
+                        Decorative LED lights for bedrooms, desks and entertainment spaces.
+                    </p>
+
+                    <div class="product-price">
+                        ₹899
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 34 -->
+
+            <article class="product-card" data-name="Air Purifier" data-category="Home">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?auto=format&fit=crop&w=800&q=80"
+                    alt="Air Purifier">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>Air Purifier</h3>
+
+                    <p class="product-description">
+                        Compact air purifier designed for cleaner indoor air.
+                    </p>
+
+                    <div class="product-price">
+                        ₹8,499
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 35 -->
+
+            <article class="product-card" data-name="Electric Kettle" data-category="Home">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1594213114663-d94db9b1719d?auto=format&fit=crop&w=800&q=80"
+                    alt="Electric Kettle">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Home
+                    </span>
+
+                    <h3>Electric Kettle</h3>
+
+                    <p class="product-description">
+                        Fast-boiling electric kettle for tea, coffee and hot water.
+                    </p>
+
+                    <div class="product-price">
+                        ₹1,299
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 36 -->
+
+            <article class="product-card" data-name="Portable Fan" data-category="Lifestyle">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1524292332709-4f5d1c5c0e22?auto=format&fit=crop&w=800&q=80"
+                    alt="Portable Fan">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Lifestyle
+                    </span>
+
+                    <h3>Portable Fan</h3>
+
+                    <p class="product-description">
+                        Compact rechargeable fan for home, office and travel.
+                    </p>
+
+                    <div class="product-price">
+                        ₹899
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 37 -->
+
+            <article class="product-card" data-name="Travel Pillow" data-category="Travel">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?auto=format&fit=crop&w=800&q=80"
+                    alt="Travel Pillow">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Travel
+                    </span>
+
+                    <h3>Travel Pillow</h3>
+
+                    <p class="product-description">
+                        Comfortable neck pillow designed for long journeys.
+                    </p>
+
+                    <div class="product-price">
+                        ₹799
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 38 -->
+
+            <article class="product-card" data-name="Notebook" data-category="Stationery">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1531346680769-a1d79b57de5c?auto=format&fit=crop&w=800&q=80"
+                    alt="Notebook">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Stationery
+                    </span>
+
+                    <h3>Notebook</h3>
+
+                    <p class="product-description">
+                        Premium notebook suitable for notes, planning and journaling.
+                    </p>
+
+                    <div class="product-price">
+                        ₹299
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 39 -->
+
+            <article class="product-card" data-name="Backpack Laptop Sleeve" data-category="Accessories">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?auto=format&fit=crop&w=800&q=80"
+                    alt="Laptop Sleeve">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Accessories
+                    </span>
+
+                    <h3>Laptop Sleeve</h3>
+
+                    <p class="product-description">
+                        Protective padded laptop sleeve for students and professionals.
+                    </p>
+
+                    <div class="product-price">
+                        ₹999
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- PRODUCT 40 -->
+
+            <article class="product-card" data-name="USB Flash Drive" data-category="Electronics">
+
+                <img class="product-image"
+                    src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=800&q=80"
+                    alt="USB Flash Drive">
+
+                <div class="product-info">
+
+                    <span class="product-category">
+                        Electronics
+                    </span>
+
+                    <h3>USB Flash Drive</h3>
+
+                    <p class="product-description">
+                        Compact high-speed USB flash drive for storing and transferring files.
+                    </p>
+
+                    <div class="product-price">
+                        ₹699
+                    </div>
+
+                    <div class="button-group">
+
+                        <button class="add-to-cart-btn" type="button">
+                            Add to Cart
+                        </button>
+
+                        <button class="view-details-btn" type="button">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+
+        <!-- NO RESULTS -->
+
+        <div id="no-results">
+
+            <h3>Product Not Available</h3>
+
+            <p>
+                Sorry, we couldn't find a product matching your search.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         PRODUCT DETAILS MODAL
+    ====================================================== -->
+
+    <div class="modal" id="product-modal" aria-hidden="true">
+
+        <div class="modal-content">
+
+            <button class="close-modal" id="close-modal" type="button" aria-label="Close">
+                ×
+            </button>
+
+            <div class="modal-body">
+
+                <div>
+
+                    <img id="details-image" class="modal-image" src="" alt="Product">
+
+                </div>
+
+                <div class="modal-details">
+
+                    <span id="details-category" class="category">
+                    </span>
+
+                    <h2 id="details-name"></h2>
+
+                    <p id="details-description" class="description">
+                    </p>
+
+                    <div id="details-price" class="modal-price">
+                    </div>
+
+                    <div class="availability">
+                        ✓ In Stock
+                    </div>
+
+                    <h3 class="features-title">
+                        Features
+                    </h3>
+
+                    <ul id="details-features">
+                    </ul>
+
+                    <button id="details-add-cart" type="button">
+                        Add to Cart
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOAST
+    ====================================================== -->
+
+    <div id="toast" class="toast">
+        Product added to cart!
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer>
+
+        <p>
+            © 2026 ShopSphere. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            /* =================================================
+               CART STORAGE
+            ================================================= */
+
+            const CART_KEY = "shopsphere_cart";
+
+
+            function getCart() {
+
+                const savedCart =
+                    localStorage.getItem(CART_KEY);
+
+                if (!savedCart) {
+                    return [];
+                }
+
+                try {
+
+                    const cart =
+                        JSON.parse(savedCart);
+
+                    return Array.isArray(cart)
+                        ? cart
+                        : [];
+
+                } catch (error) {
+
+                    console.error(
+                        "Error reading cart:",
+                        error
+                    );
+
+                    return [];
+                }
+            }
+
+
+            function saveCart(cart) {
+
+                try {
+
+                    localStorage.setItem(
+                        CART_KEY,
+                        JSON.stringify(cart)
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Error saving cart:",
+                        error
+                    );
+                }
+            }
+
+
+            /* =================================================
+               DOM ELEMENTS
+            ================================================= */
+
+            const searchInput =
+                document.getElementById("product-search");
+
+            const clearSearch =
+                document.getElementById("clear-search");
+
+            const productList =
+                document.getElementById("product-list");
+
+            const productCards =
+                Array.from(
+                    document.querySelectorAll(".product-card")
+                );
+
+            const noResults =
+                document.getElementById("no-results");
+
+            const resultCount =
+                document.getElementById("result-count");
+
+
+            /* =================================================
+               MODAL ELEMENTS
+            ================================================= */
+
+            const modal =
+                document.getElementById("product-modal");
+
+            const closeModal =
+                document.getElementById("close-modal");
+
+            const detailsImage =
+                document.getElementById("details-image");
+
+            const detailsCategory =
+                document.getElementById("details-category");
+
+            const detailsName =
+                document.getElementById("details-name");
+
+            const detailsDescription =
+                document.getElementById("details-description");
+
+            const detailsPrice =
+                document.getElementById("details-price");
+
+            const detailsFeatures =
+                document.getElementById("details-features");
+
+            const detailsAddCart =
+                document.getElementById("details-add-cart");
+
+            const toast =
+                document.getElementById("toast");
+
+
+            /* =================================================
+               CURRENT PRODUCT
+            ================================================= */
+
+            let currentProduct = null;
+
+
+            /* =================================================
+               PRODUCT FEATURES
+            ================================================= */
+
+            const productFeatures = {
+
+                "Wireless Headphones": [
+                    "Wireless Bluetooth connection",
+                    "High-quality stereo sound",
+                    "Comfortable ear cushions",
+                    "Long battery life"
+                ],
+
+                "Smart Watch": [
+                    "Fitness tracking",
+                    "Heart-rate monitoring",
+                    "Smart notifications",
+                    "Water resistant design"
+                ],
+
+                "Running Shoes": [
+                    "Lightweight construction",
+                    "Comfortable cushioning",
+                    "Breathable material",
+                    "Durable outsole"
+                ],
+
+                "Leather Backpack": [
+                    "Premium design",
+                    "Multiple compartments",
+                    "Durable construction",
+                    "Comfortable shoulder straps"
+                ],
+
+                "Smartphone": [
+                    "High-resolution display",
+                    "Powerful processor",
+                    "High-quality camera",
+                    "Large battery"
+                ],
+
+                "Laptop": [
+                    "High-performance processor",
+                    "Full HD display",
+                    "Fast SSD storage",
+                    "Long battery life"
+                ],
+
+                "Bluetooth Speaker": [
+                    "Bluetooth connectivity",
+                    "Powerful audio",
+                    "Portable design",
+                    "Rechargeable battery"
+                ],
+
+                "Gaming Mouse": [
+                    "High precision sensor",
+                    "Customizable buttons",
+                    "Ergonomic design",
+                    "RGB lighting"
+                ],
+
+                "Mechanical Keyboard": [
+                    "Mechanical switches",
+                    "RGB backlight",
+                    "Durable keys",
+                    "Anti-ghosting"
+                ],
+
+                "Gaming Headset": [
+                    "Surround sound",
+                    "Noise-isolating earcups",
+                    "Built-in microphone",
+                    "Comfortable headband"
+                ],
+
+                "Coffee Maker": [
+                    "Easy operation",
+                    "Fast brewing",
+                    "Durable construction",
+                    "Compact design"
+                ],
+
+                "Table Lamp": [
+                    "Modern design",
+                    "Energy-efficient lighting",
+                    "Adjustable brightness",
+                    "Compact size"
+                ],
+
+                "Water Bottle": [
+                    "Stainless steel body",
+                    "Leak-proof lid",
+                    "Reusable",
+                    "Easy to carry"
+                ],
+
+                "Sunglasses": [
+                    "UV protection",
+                    "Stylish frame",
+                    "Lightweight design",
+                    "Durable lenses"
+                ],
+
+                "Smart TV": [
+                    "High-resolution display",
+                    "Smart streaming",
+                    "Built-in Wi-Fi",
+                    "Multiple connectivity options"
+                ],
+
+                "Wireless Earbuds": [
+                    "True wireless design",
+                    "Clear sound",
+                    "Charging case",
+                    "Compact size"
+                ],
+
+                "Office Chair": [
+                    "Ergonomic design",
+                    "Adjustable height",
+                    "Comfortable cushioning",
+                    "Strong base"
+                ],
+
+                "Backpack": [
+                    "Multiple compartments",
+                    "Lightweight design",
+                    "Water-resistant material",
+                    "Comfortable straps"
+                ],
+
+                "Fitness Tracker": [
+                    "Step tracking",
+                    "Heart-rate monitoring",
+                    "Workout tracking",
+                    "Sleep monitoring"
+                ],
+
+                "Yoga Mat": [
+                    "Non-slip surface",
+                    "Comfortable cushioning",
+                    "Lightweight",
+                    "Easy to clean"
+                ],
+
+                "Power Bank": [
+                    "High capacity",
+                    "Fast charging",
+                    "Portable design",
+                    "Multiple charging ports"
+                ],
+
+                "Camera": [
+                    "High-resolution sensor",
+                    "Video recording",
+                    "Optical zoom",
+                    "Portable design"
+                ],
+
+                "Travel Bag": [
+                    "Large storage capacity",
+                    "Durable material",
+                    "Multiple compartments",
+                    "Travel-friendly design"
+                ],
+
+                "Desk Organizer": [
+                    "Multiple sections",
+                    "Compact design",
+                    "Durable material",
+                    "Keeps desk organized"
+                ],
+
+                "Tablet": [
+                    "Large touchscreen",
+                    "Powerful processor",
+                    "Long battery life",
+                    "Portable design"
+                ],
+
+                "Smartphone Stand": [
+                    "Adjustable angle",
+                    "Stable base",
+                    "Foldable design",
+                    "Universal compatibility"
+                ],
+
+                "Bluetooth Keyboard": [
+                    "Wireless connection",
+                    "Slim design",
+                    "Comfortable keys",
+                    "Long battery life"
+                ],
+
+                "Monitor": [
+                    "High-resolution display",
+                    "Wide viewing angle",
+                    "Low response time",
+                    "Modern design"
+                ],
+
+                "Webcam": [
+                    "Full HD video",
+                    "Built-in microphone",
+                    "Easy USB connection",
+                    "Adjustable mounting"
+                ],
+
+                "Desk Mat": [
+                    "Large surface",
+                    "Smooth mouse movement",
+                    "Water-resistant",
+                    "Anti-slip base"
+                ],
+
+                "Wireless Charger": [
+                    "Wireless charging",
+                    "Compact design",
+                    "Easy to use",
+                    "Compatible with supported devices"
+                ],
+
+                "Bluetooth Adapter": [
+                    "Bluetooth connectivity",
+                    "Compact size",
+                    "Plug and play",
+                    "Low power consumption"
+                ],
+
+                "LED Strip Lights": [
+                    "Easy installation",
+                    "Bright LED lighting",
+                    "Flexible strip",
+                    "Decorative design"
+                ],
+
+                "Air Purifier": [
+                    "Air filtration",
+                    "Quiet operation",
+                    "Compact design",
+                    "Easy controls"
+                ],
+
+                "Electric Kettle": [
+                    "Fast boiling",
+                    "Automatic shutoff",
+                    "Large capacity",
+                    "Easy operation"
+                ],
+
+                "Portable Fan": [
+                    "Rechargeable battery",
+                    "Portable design",
+                    "Multiple speed settings",
+                    "Quiet operation"
+                ],
+
+                "Travel Pillow": [
+                    "Comfortable support",
+                    "Soft material",
+                    "Lightweight",
+                    "Travel-friendly"
+                ],
+
+                "Notebook": [
+                    "Premium paper",
+                    "Durable cover",
+                    "Portable size",
+                    "Suitable for notes"
+                ],
+
+                "Backpack Laptop Sleeve": [
+                    "Padded protection",
+                    "Lightweight",
+                    "Water-resistant",
+                    "Compatible with laptops"
+                ],
+
+                "USB Flash Drive": [
+                    "Fast data transfer",
+                    "Compact design",
+                    "Portable",
+                    "Reliable storage"
+                ]
+
+            };
+
+
+            /* =================================================
+               TOAST
+            ================================================= */
+
+            function showToast(message) {
+
+                toast.textContent = message;
+
+                toast.classList.add("show");
+
+                setTimeout(function () {
+
+                    toast.classList.remove("show");
+
+                }, 2000);
+            }
+
+
+            /* =================================================
+               CREATE PRODUCT OBJECT
+            ================================================= */
+
+            function getProductFromCard(card) {
+
+                const name =
+                    card.querySelector("h3").textContent.trim();
+
+                const description =
+                    card
+                        .querySelector(".product-description")
+                        .textContent
+                        .trim();
+
+                const price =
+                    card
+                        .querySelector(".product-price")
+                        .textContent
+                        .trim();
+
+                const category =
+                    card
+                        .querySelector(".product-category")
+                        .textContent
+                        .trim();
+
+                const image =
+                    card
+                        .querySelector(".product-image")
+                        .src;
+
+                const id =
+                    name
+                        .toLowerCase()
+                        .replace(/[^a-z0-9]+/g, "-")
+                        .replace(/^-|-$/g, "");
+
+
+                return {
+
+                    id: id,
+
+                    name: name,
+
+                    description: description,
+
+                    price: price,
+
+                    category: category,
+
+                    image: image,
+
+                    quantity: 1
+
+                };
+            }
+
+
+            /* =================================================
+               ADD PRODUCT TO CART
+            ================================================= */
+
+            function addProductToCart(product) {
+
+                let cart = getCart();
+
+                const existingProduct =
+                    cart.find(function (item) {
+
+                        return item.id === product.id;
+
+                    });
+
+
+                if (existingProduct) {
+
+                    existingProduct.quantity =
+                        Number(existingProduct.quantity || 0) + 1;
+
+                } else {
+
+                    cart.push(product);
+
+                }
+
+
+                saveCart(cart);
+
+                showToast(
+                    product.name + " added to cart!"
+                );
+            }
+
+
+            /* =================================================
+               ADD TO CART BUTTONS
+            ================================================= */
+
+            const addToCartButtons =
+                document.querySelectorAll(
+                    ".add-to-cart-btn"
+                );
+
+
+            addToCartButtons.forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const card =
+                            button.closest(".product-card");
+
+                        if (!card) {
+                            return;
+                        }
+
+                        const product =
+                            getProductFromCard(card);
+
+                        addProductToCart(product);
+
+                    }
+                );
+
+            });
+
+
+            /* =================================================
+               SEARCH
+            ================================================= */
+
+            function performSearch() {
+
+                const searchTerm =
+                    searchInput.value
+                        .trim()
+                        .toLowerCase();
+
+
+                let visibleCount = 0;
+
+
+                productCards.forEach(function (card) {
+
+                    const name =
+                        card
+                            .dataset
+                            .name
+                            .toLowerCase();
+
+                    const category =
+                        card
+                            .dataset
+                            .category
+                            .toLowerCase();
+
+                    const description =
+                        card
+                            .querySelector(
+                                ".product-description"
+                            )
+                            .textContent
+                            .toLowerCase();
+
+
+                    const matches =
+                        name.includes(searchTerm) ||
+                        category.includes(searchTerm) ||
+                        description.includes(searchTerm);
+
+
+                    if (matches) {
+
+                        card.style.display = "";
+
+                        visibleCount++;
+
+                    } else {
+
+                        card.style.display = "none";
+
+                    }
+
+                });
+
+
+                if (searchTerm.length > 0) {
+
+                    clearSearch.style.display =
+                        "block";
+
+                } else {
+
+                    clearSearch.style.display =
+                        "none";
+
+                }
+
+
+                if (visibleCount === 0) {
+
+                    noResults.style.display =
+                        "block";
+
+                    productList.style.display =
+                        "none";
+
+                    resultCount.textContent =
+                        "No products found";
+
+                } else {
+
+                    noResults.style.display =
+                        "none";
+
+                    productList.style.display =
+                        "grid";
+
+                    resultCount.textContent =
+                        "Showing " +
+                        visibleCount +
+                        " product" +
+                        (visibleCount !== 1 ? "s" : "");
+
+                }
+
+            }
+
+
+            searchInput.addEventListener(
+                "input",
+                performSearch
+            );
+
+
+            /* =================================================
+               CLEAR SEARCH
+            ================================================= */
+
+            clearSearch.addEventListener(
+                "click",
+                function () {
+
+                    searchInput.value = "";
+
+                    performSearch();
+
+                    searchInput.focus();
+
+                }
+            );
+
+
+            /* =================================================
+               OPEN PRODUCT DETAILS
+            ================================================= */
+
+            const viewDetailsButtons =
+                document.querySelectorAll(
+                    ".view-details-btn"
+                );
+
+
+            viewDetailsButtons.forEach(function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const card =
+                            button.closest(".product-card");
+
+                        if (!card) {
+                            return;
+                        }
+
+
+                        currentProduct =
+                            getProductFromCard(card);
+
+
+                        detailsImage.src =
+                            currentProduct.image;
+
+                        detailsImage.alt =
+                            currentProduct.name;
+
+
+                        detailsCategory.textContent =
+                            currentProduct.category;
+
+
+                        detailsName.textContent =
+                            currentProduct.name;
+
+
+                        detailsDescription.textContent =
+                            currentProduct.description;
+
+
+                        detailsPrice.textContent =
+                            currentProduct.price;
+
+
+                        detailsFeatures.innerHTML =
+                            "";
+
+
+                        const features =
+                            productFeatures[
+                            currentProduct.name
+                            ] || [
+                                "Premium quality",
+                                "Modern design",
+                                "Reliable performance",
+                                "Easy to use"
+                            ];
+
+
+                        features.forEach(
+                            function (feature) {
+
+                                const li =
+                                    document.createElement("li");
+
+                                li.textContent =
+                                    feature;
+
+                                detailsFeatures.appendChild(li);
+
+                            }
+                        );
+
+
+                        modal.classList.add("active");
+
+                        modal.setAttribute(
+                            "aria-hidden",
+                            "false"
+                        );
+
+
+                        document.body.style.overflow =
+                            "hidden";
+
+                    }
+                );
+
+            });
+
+
+            /* =================================================
+               MODAL ADD TO CART
+            ================================================= */
+
+            detailsAddCart.addEventListener(
+                "click",
+                function () {
+
+                    if (!currentProduct) {
+                        return;
+                    }
+
+
+                    addProductToCart(
+                        currentProduct
+                    );
+
+                }
+            );
+
+
+            /* =================================================
+               CLOSE MODAL FUNCTION
+            ================================================= */
+
+            function closeProductModal() {
+
+                modal.classList.remove("active");
+
+                modal.setAttribute(
+                    "aria-hidden",
+                    "true"
+                );
+
+                document.body.style.overflow =
+                    "";
+
+                currentProduct = null;
+
+            }
+
+
+            /* =================================================
+               CLOSE BUTTON
+            ================================================= */
+
+            closeModal.addEventListener(
+                "click",
+                closeProductModal
+            );
+
+
+            /* =================================================
+               CLICK OUTSIDE MODAL
+            ================================================= */
+
+            modal.addEventListener(
+                "click",
+                function (event) {
+
+                    if (
+                        event.target === modal
+                    ) {
+
+                        closeProductModal();
+
+                    }
+
+                }
+            );
+
+
+            /* =================================================
+               ESCAPE KEY
+            ================================================= */
+
+            document.addEventListener(
+                "keydown",
+                function (event) {
+
+                    if (
+                        event.key === "Escape" &&
+                        modal.classList.contains("active")
+                    ) {
+
+                        closeProductModal();
+
+                    }
+
+                }
+            );
+
+
+            /* =================================================
+               INITIAL SEARCH
+            ================================================= */
+
+            performSearch();
+
+
+            console.log(
+                "ShopSphere Products page loaded successfully."
+            );
+
+        });
+
+    </script>
+
+</body>
+
+</html>
